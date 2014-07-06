@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var FlashQueue = React.createClass({
-  render: function() {
-    var messages = this.props.messages.map(function(message){
+  messages: function() {
+    return this.props.messages.map(function(message) {
       var classes = React.addons.classSet({
         'flash-message': true,
         'is-notice':     message.type == 'notice',
@@ -16,11 +16,13 @@ var FlashQueue = React.createClass({
           <DismissButton isDismissable={message.isDismissable} dismissMessage={this.dismissMessage} />
         </div>
       );
-    }, this);
+    }, this)
+  },
 
+  render: function() {
     return (
       <div className="flash-queue">
-        {messages}
+        {this.messages}
       </div>
     );
   }
