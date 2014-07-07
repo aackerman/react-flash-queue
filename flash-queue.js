@@ -1,28 +1,73 @@
 /** @jsx React.DOM */
-var FlashQueue = React.createClass({
-  messages: function() {
-    return this.props.messages.map(function(message) {
-      var classes = React.addons.classSet({
-        'flash-message': true,
-        'is-notice':     message.type == 'notice',
-        'is-alert':      message.type == 'alert',
-        'is-warning':    message.type == 'warning',
-        'is-info':       message.type == 'info'
-      });
+(function(){
 
-      return (
-        <div className={classes}>
-          {message.text}
-          <DismissButton isDismissable={message.isDismissable} dismissMessage={this.dismissMessage} />
-        </div>
-      );
-    }, this)
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+var FlashQueue = React.createClass({
+  lastuuid: 0,
+
+  getDefaultProps: function() {
+    return {messages: []};
+  },
+
+  uuid: function() {
+    var now = +(new Date);
+    if (now == this.lastuuid) {
+      now += 1;
+    }
+    this.lastuuid = now;
+    return now;
+  },
+
+  flash: function(type, text, opts) {
+    var id = this.uuid();
+    this.props.messages.push({
+      type: type,
+      text: text,
+      id: id,
+      dismissable: true
+    });
+    this.forceUpdate();
+
+    setTimeout(function() {
+      var messages = this.props.messages.filter(function(message){
+        return message.id != id;
+      });
+      this.setProps({ messages: messages });
+    }.bind(this), 5 * 1e3);
   },
 
   render: function() {
     return (
       <div className="flash-queue">
-        {this.messages}
+        <ReactCSSTransitionGroup transitionName="flashfade">
+        {this.props.messages.map(function(message) {
+          return <FlashMessage
+            key={message.id}
+            text={message.text}
+            type={message.type}
+          />;
+        })}
+        </ReactCSSTransitionGroup>
+      </div>
+    );
+  }
+});
+
+var FlashMessage = React.createClass({
+  render: function() {
+    var classes = React.addons.classSet({
+      'flash-message': true,
+      'is-notice':     this.props.type == 'notice',
+      'is-alert':      this.props.type == 'alert',
+      'is-warning':    this.props.type == 'warning',
+      'is-info':       this.props.type == 'info'
+    });
+
+    return (
+      <div className={classes}>
+        {this.props.text}
+        <DismissButton dismissCallback={this.props.dismissCallback}/>
       </div>
     );
   }
@@ -38,39 +83,8 @@ var DismissButton = React.createClass({
   }
 });
 
-var App = App || {};
-App.flash = (function() {
-  var messages = [];
-  var lastuuid = 0;
+var InstallFlash = function(host, el) {
+  host.flash = React.renderComponent(<FlashQueue/>, el).flash;
+}
 
-  function render() {
-    React.renderComponent(<FlashQueue messages={messages}/>, document.querySelector('body'));
-  }
-
-
-
-  function uuid() {
-    var now = +(new Date);
-    if (now == lastuuid) now += 1;
-    lastuuid = now;
-    return now;
-  }
-
-  return function(type, text, opts) {
-    var id = uuid()
-    messages.push({
-      type: type,
-      text: text,
-      id: id,
-      dismissable: true
-    })
-    setTimeout(function() {
-      console.log('remove message ' + id)
-      messages = messages.filter(function(message){
-        return message.id != id;
-      });
-      render();
-    }, 5 * 1e3);
-    render();
-  }
 })();

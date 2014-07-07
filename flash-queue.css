@@ -1,4 +1,5 @@
 .flash-queue {
+  font-family: Helvetica Neue, Helvetica, Arial;
   position: fixed;
   z-index: 9999;
   top: 20px;
@@ -17,20 +18,13 @@
 }
 
 .flash-message {
-  opacity: 0.0;
   position: relative;
   margin-bottom: 5px;
   border-radius: 3px;
   padding: 8px 20px 8px 8px;
   background-color: rgb(60, 60, 60);
   background-color: rgba(60, 60, 60, 0.9);
-  -webkit-transition: opacity 0.3s;
-  -moz-transition: opacity 0.3s;
-  transition: opacity 0.3s;
-}
 
-.flash-message.is-visible {
-  opacity: 1.0;
 }
 
 .flash-message.is-notice {
@@ -65,4 +59,22 @@
   cursor: pointer;
   font-size: 18px;
   padding: 13px 10px 17px;
+}
+
+.flashfade-enter {
+  opacity: 0.01;
+  transition: opacity .3s ease-in;
+}
+
+.flashfade-enter.flashfade-enter-active {
+  opacity: 1;
+}
+
+.flashfade-leave {
+  opacity: 1;
+  transition: opacity .3s ease-in;
+}
+
+.flashfade-leave.flashfade-leave-active {
+  opacity: 0.01;
 }
