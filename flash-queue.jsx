@@ -37,17 +37,23 @@ var FlashQueue = React.createClass({
     }.bind(this), 5 * 1e3);
   },
 
+  dismissMessage: function(id) {
+    this.props.messages.splice(id, 1);
+    this.forceUpdate();
+  },
+
   render: function() {
     return (
       <div className="flash-queue">
         <ReactCSSTransitionGroup transitionName="flashfade">
-        {this.props.messages.map(function(message) {
+        {this.props.messages.map(function(message, i) {
           return <FlashMessage
             key={message.id}
             text={message.text}
             type={message.type}
+            dismissMessage={this.dismissMessage.bind(this, i)}
           />;
-        })}
+        }.bind(this))}
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -67,7 +73,7 @@ var FlashMessage = React.createClass({
     return (
       <div className={classes}>
         {this.props.text}
-        <DismissButton dismissCallback={this.props.dismissCallback}/>
+        <DismissButton dismissMessage={this.props.dismissMessage}/>
       </div>
     );
   }
@@ -86,5 +92,7 @@ var DismissButton = React.createClass({
 var InstallFlash = function(host, el) {
   host.flash = React.renderComponent(<FlashQueue/>, el).flash;
 }
+
+window.InstallFlash = InstallFlash;
 
 })();
