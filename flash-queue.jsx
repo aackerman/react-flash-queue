@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-(function(){
+(function(root){
 
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -89,10 +89,19 @@ var DismissButton = React.createClass({
   }
 });
 
-var InstallFlash = function(host, el) {
+var install = function(host, el) {
   host.flash = React.renderComponent(<FlashQueue/>, el).flash;
 }
 
-window.InstallFlash = InstallFlash;
+var exports = {
+  install: install
+}
 
-})();
+if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+  root.FlashQueue = exports;
+  define(function() { return exports; });
+} else {
+  root.FlashQueue = exports;
+}
+
+})(this);
