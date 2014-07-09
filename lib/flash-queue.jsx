@@ -51,6 +51,7 @@ var FlashQueue = React.createClass({
             key={message.id}
             text={message.text}
             type={message.type}
+            dismissable={message.dismissable}
             dismissMessage={this.dismissMessage.bind(this, i)}
           />;
         }.bind(this))}
@@ -73,7 +74,10 @@ var FlashMessage = React.createClass({
     return (
       <div className={classes}>
         {this.props.text}
-        <DismissButton dismissMessage={this.props.dismissMessage}/>
+        <DismissButton
+          dismissable={this.props.dismissable}
+          dismissMessage={this.props.dismissMessage}
+        />
       </div>
     );
   }
@@ -81,7 +85,7 @@ var FlashMessage = React.createClass({
 
 var DismissButton = React.createClass({
   render: function() {
-    if (this.props.isDismissable) {
+    if (this.props.dismissable) {
       return ''
     } else {
       return <i className="flash-delete" onClick={this.props.dismissMessage}>&times;</i>;
