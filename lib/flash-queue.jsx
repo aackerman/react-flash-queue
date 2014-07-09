@@ -21,6 +21,7 @@ var FlashQueue = React.createClass({
 
   flash: function(type, text, opts) {
     var id = this.uuid();
+    var scheduledToDestroy = opts.scheduledToDestroy;
     this.props.messages.push({
       type: type,
       text: text,
@@ -28,13 +29,14 @@ var FlashQueue = React.createClass({
       dismissable: true
     });
     this.forceUpdate();
-
-    setTimeout(function() {
-      var messages = this.props.messages.filter(function(message){
-        return message.id != id;
-      });
-      this.setProps({ messages: messages });
-    }.bind(this), 5 * 1e3);
+    if (scheduledToDestroy) {
+      setTimeout(function() {
+        var messages = this.props.messages.filter(function(message){
+          return message.id != id;
+        });
+        this.setProps({ messages: messages });
+      }.bind(this), 5 * 1e3);
+    }
   },
 
   dismissMessage: function(id) {
