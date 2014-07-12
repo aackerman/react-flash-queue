@@ -22,7 +22,7 @@ var App = React.createClass({
 React.renderComponent(<App/>, document.querySelector('body'));
 ```
 
-The `FlashQueue.Mixin` installs a `flash` method to create new flashes.
+The `FlashQueue.Mixin` installs a `flash` method to create new flashes adding and removing to `props.messages` on the object using the mixin.
 
 ## Author
 
