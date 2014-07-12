@@ -5,17 +5,24 @@ A messaging queue for the browser built with React.
 ## Usage
 
 ```js
-FlashQueue.install(App, document.querySelector('body'));
+var App = React.createClass({
+
+  mixins: [FlashQueue.Mixin],
+
+  componentDidMount: function() {
+    this.flash('notice', 'A friendly notice');
+  },
+
+  render: function() {
+    var queue = FlashQueue.DOM.queue;
+    return <queue messages={this.props.messages}/>;
+  }
+});
+
+React.renderComponent(<App/>, document.querySelector('body'));
 ```
 
-This will render the flash queue with `React.renderComponent` into the provided element. And a `flash` method will be installed into the first argument.
-
-```js
-App.flash('notice', 'A friendly flash message');
-App.flash('warning', 'A warning flash message');
-App.flash('info', 'An informational flash message');
-App.flash('alert', 'An dangerous flash message');
-```
+The `FlashQueue.Mixin` installs a `flash` method to create new flashes.
 
 ## Author
 
