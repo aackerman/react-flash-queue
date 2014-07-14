@@ -2,7 +2,7 @@
 
 A messaging queue for the browser built with React.
 
-![Example flash messages](//raw.githubusercontent.com/aackerman/react-flash-queue/master/src/images/example.png)
+![Example flash messages](https://raw.githubusercontent.com/aackerman/react-flash-queue/master/src/images/example.png)
 
 ## Usage
 
