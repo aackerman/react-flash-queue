@@ -57,22 +57,14 @@ var DismissButton = React.createClass({
 });
 
 var Mixin = {
-  __lastuuid: 0,
-
   getDefaultProps: function() {
     return {messages: []};
   },
 
-  __uuid: function() {
-    var now = +(new Date());
-    if (now == this.__lastuuid) {
-      now += 1;
-    }
-    this.lastuuid = now;
-    return now;
-  },
+  _uuid: 0,
+
   flash: function(type, text, opts) {
-    var id = this.__uuid();
+    var id = this._uuid++;
     this.props.messages.push({
       type: type,
       text: text,
