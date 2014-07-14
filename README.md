@@ -22,7 +22,7 @@ var App = React.createClass({
 React.renderComponent(<App/>, document.querySelector('body'));
 ```
 
-The `FlashQueue.Mixin` installs a `flash` method to create new flashes adding and removing to `props.messages` on the object using the mixin.
+The `FlashQueue.Mixin` extends the host a `flash` method to create new flashes. The `flash` method modifies `this.props.messages` on the host object. And expects `this.props.messages` will be passed as the `messages` prop for a queue instance.
 
 ## Author
 
